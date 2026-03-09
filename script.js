@@ -324,40 +324,255 @@
         document.getElementById('deptStatsList').innerHTML = createListItems(deptCounts);
     }
 
-    // --- Modal Print (List/Stats/Single) ---
-    document.getElementById('printListBtn')?.addEventListener('click', () => {
-        document.body.classList.add('printing-modal');
-        document.body.classList.remove('printing-stats-only', 'printing-single-report');
+    // --- Print Preview Modal ---
+    const printPreviewModal = document.getElementById('printPreviewModal');
+    const printPreviewContent = document.getElementById('printPreviewContent');
+    const printPreviewTitle = document.getElementById('printPreviewTitle');
+    let currentPrintMode = null; // 'form' | 'list' | 'stats' | 'single'
+    let currentPrintReportId = null;
+
+    function openPrintPreview(mode, reportId) {
+        currentPrintMode = mode;
+        currentPrintReportId = reportId || null;
+
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+        let html = '';
+
+        if (mode === 'form') {
+            printPreviewTitle.textContent = '印刷プレビュー — 報告書';
+            html = renderFormPreview(dateStr);
+        } else if (mode === 'single') {
+            printPreviewTitle.textContent = '印刷プレビュー — 個別報告';
+            html = renderSingleReportPreview(reportId, dateStr);
+        } else if (mode === 'list') {
+            printPreviewTitle.textContent = '印刷プレビュー — 報告一覧';
+            html = renderListPreview(dateStr);
+        } else if (mode === 'stats') {
+            printPreviewTitle.textContent = '印刷プレビュー — 統計情報';
+            html = renderStatsPreview(dateStr);
+        }
+
+        printPreviewContent.innerHTML = html;
+        printPreviewModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePrintPreview() {
+        printPreviewModal.classList.remove('active');
+        document.body.style.overflow = '';
+        currentPrintMode = null;
+        currentPrintReportId = null;
+    }
+
+    function executePrint() {
+        document.body.classList.add('printing-preview');
+        // プレビューの中身をルートに直接コピーして印刷
         window.print();
-        setTimeout(() => document.body.classList.remove('printing-modal'), 500);
-    });
+        setTimeout(() => {
+            document.body.classList.remove('printing-preview');
+        }, 500);
+    }
 
-    document.getElementById('printStatsBtn')?.addEventListener('click', () => {
-        document.body.classList.add('printing-modal', 'printing-stats-only');
-        document.body.classList.remove('printing-single-report');
-        window.print();
-        setTimeout(() => document.body.classList.remove('printing-modal', 'printing-stats-only'), 500);
-    });
+    // --- Preview Renderers ---
 
-    window.__printReport = function (id) {
-        document.body.classList.add('printing-modal', 'printing-single-report');
-        document.body.classList.remove('printing-stats-only');
+    function renderFormPreview(dateStr) {
+        const riskLabels = { '0': 'レベル0', '1': 'レベル1', '2': 'レベル2', '3': 'レベル3' };
+        const data = {
+            reporterName: document.getElementById('reporterName').value.trim() || '—',
+            department: document.getElementById('department').value || '—',
+            reportDate: document.getElementById('reportDate').value || '—',
+            incidentDate: document.getElementById('incidentDate').value ? formatDateTime(document.getElementById('incidentDate').value) : '—',
+            location: document.getElementById('location').value || '—',
+            residentName: document.getElementById('residentName').value.trim() || '—',
+            careLevel: document.getElementById('careLevel').value || '—',
+            category: (form.querySelector('input[name="category"]:checked') || {}).value || '—',
+            riskLevel: (form.querySelector('input[name="riskLevel"]:checked') || {}).value,
+            description: document.getElementById('description').value.trim() || '—',
+            cause: document.getElementById('cause').value.trim() || '—',
+            response: document.getElementById('response').value.trim() || '—',
+            prevention: document.getElementById('prevention').value.trim() || '—',
+        };
+        const riskText = data.riskLevel !== undefined ? (riskLabels[data.riskLevel] || '—') : '—';
 
-        // 印刷対象のカードだけを表示するためのデータ属性を追加
-        document.querySelectorAll('.history-card').forEach(card => {
-            if (card.dataset.id === id) {
-                card.classList.add('print-target');
-            } else {
-                card.classList.remove('print-target');
-            }
+        return buildReportTable('ヒヤリハット報告書', dateStr, data, riskText);
+    }
+
+    function renderSingleReportPreview(id, dateStr) {
+        const reports = getReports();
+        const r = reports.find(rep => rep.id === id);
+        if (!r) return '<p>報告が見つかりません</p>';
+
+        const riskLabels = { '0': 'レベル0', '1': 'レベル1', '2': 'レベル2', '3': 'レベル3' };
+        const data = {
+            reporterName: r.reporterName || '—',
+            department: r.department || '—',
+            reportDate: r.reportDate || '—',
+            incidentDate: r.incidentDate ? formatDateTime(r.incidentDate) : '—',
+            location: r.location || '—',
+            residentName: r.residentName || '—',
+            careLevel: r.careLevel || '—',
+            category: r.category || '—',
+            description: r.description || '—',
+            cause: r.cause || '—',
+            response: r.response || '—',
+            prevention: r.prevention || '—',
+        };
+        const riskText = riskLabels[r.riskLevel] || '—';
+
+        return buildReportTable('ヒヤリハット報告書', dateStr, data, riskText);
+    }
+
+    function buildReportTable(title, dateStr, data, riskText) {
+        return `
+            <div class="preview-header">
+                <h2>${escapeHtml(title)}</h2>
+                <div class="print-date">印刷日時: ${escapeHtml(dateStr)}</div>
+            </div>
+            <table class="preview-report-table">
+                <tr class="preview-section-header"><td colspan="2">報告者情報</td></tr>
+                <tr><th>報告者氏名</th><td>${escapeHtml(data.reporterName)}</td></tr>
+                <tr><th>所属部署</th><td>${escapeHtml(data.department)}</td></tr>
+                <tr><th>報告日</th><td>${escapeHtml(data.reportDate)}</td></tr>
+                <tr class="preview-section-header"><td colspan="2">発生状況</td></tr>
+                <tr><th>発生日時</th><td>${escapeHtml(data.incidentDate)}</td></tr>
+                <tr><th>発生場所</th><td>${escapeHtml(data.location)}</td></tr>
+                <tr><th>対象利用者名</th><td>${escapeHtml(data.residentName)}</td></tr>
+                <tr><th>要介護度</th><td>${escapeHtml(data.careLevel)}</td></tr>
+                <tr class="preview-section-header"><td colspan="2">ヒヤリハットの内容</td></tr>
+                <tr><th>分類</th><td>${escapeHtml(data.category)}</td></tr>
+                <tr><th>危険度レベル</th><td>${escapeHtml(riskText)}</td></tr>
+                <tr><th>発生時の状況</th><td class="multiline-cell">${escapeHtml(data.description)}</td></tr>
+                <tr class="preview-section-header"><td colspan="2">原因と対策</td></tr>
+                <tr><th>原因</th><td class="multiline-cell">${escapeHtml(data.cause)}</td></tr>
+                <tr><th>実施した対応</th><td class="multiline-cell">${escapeHtml(data.response)}</td></tr>
+                <tr><th>再発防止策</th><td class="multiline-cell">${escapeHtml(data.prevention)}</td></tr>
+            </table>`;
+    }
+
+    function renderListPreview(dateStr) {
+        const reports = getReports();
+        if (reports.length === 0) return '<p>報告がありません</p>';
+
+        const riskLabels = { '0': 'レベル0', '1': 'レベル1', '2': 'レベル2', '3': 'レベル3' };
+
+        let html = `
+            <div class="preview-header">
+                <h2>ヒヤリハット報告一覧</h2>
+                <div class="print-date">印刷日時: ${escapeHtml(dateStr)} ／ 全${reports.length}件</div>
+            </div>`;
+
+        // 統計セクション
+        html += renderStatsSection(reports, riskLabels);
+
+        // 報告カード一覧
+        reports.forEach(r => {
+            const riskText = riskLabels[r.riskLevel] || '';
+            const desc = r.description.length > 120 ? r.description.slice(0, 120) + '…' : r.description;
+            html += `
+                <div class="preview-report-card">
+                    <div class="preview-report-card-header">
+                        <span class="preview-report-card-title">${escapeHtml(r.reporterName)} — ${escapeHtml(r.location)}</span>
+                        <span class="preview-report-card-date">${formatDateTime(r.incidentDate)}</span>
+                    </div>
+                    <div class="preview-report-card-body">${escapeHtml(desc)}</div>
+                    <div class="preview-report-card-tags">
+                        <span class="preview-report-tag">${escapeHtml(r.category)}</span>
+                        <span class="preview-report-tag">${riskText}</span>
+                        ${r.residentName ? `<span class="preview-report-tag">利用者: ${escapeHtml(r.residentName)}</span>` : ''}
+                    </div>
+                </div>`;
         });
 
-        window.print();
+        return html;
+    }
 
-        setTimeout(() => {
-            document.body.classList.remove('printing-modal', 'printing-single-report');
-            document.querySelectorAll('.print-target').forEach(c => c.classList.remove('print-target'));
-        }, 500);
+    function renderStatsPreview(dateStr) {
+        const reports = getReports();
+        if (reports.length === 0) return '<p>報告がありません</p>';
+
+        const riskLabels = { '0': 'レベル0', '1': 'レベル1', '2': 'レベル2', '3': 'レベル3' };
+
+        let html = `
+            <div class="preview-header">
+                <h2>ヒヤリハット統計情報</h2>
+                <div class="print-date">印刷日時: ${escapeHtml(dateStr)} ／ 全${reports.length}件</div>
+            </div>`;
+
+        html += renderStatsSection(reports, riskLabels);
+        return html;
+    }
+
+    function renderStatsSection(reports, riskLabels) {
+        const categoryCounts = {};
+        const riskCounts = { '0': 0, '1': 0, '2': 0, '3': 0 };
+        const deptCounts = {};
+
+        reports.forEach(r => {
+            if (r.category) categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
+            if (r.riskLevel !== undefined) riskCounts[r.riskLevel]++;
+            const dept = r.department || '未設定';
+            deptCounts[dept] = (deptCounts[dept] || 0) + 1;
+        });
+
+        const makeList = (counts, labelMap) =>
+            Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([key, count]) => {
+                    const label = labelMap ? (labelMap[key] || key) : key;
+                    return `<li><span>${escapeHtml(label)}</span><span class="preview-stat-count">${count}件</span></li>`;
+                }).join('');
+
+        return `
+            <div class="preview-stats-grid">
+                <div class="preview-stat-box">
+                    <h4>分類別件数</h4>
+                    <ul>${makeList(categoryCounts, null)}</ul>
+                </div>
+                <div class="preview-stat-box">
+                    <h4>危険度レベル別件数</h4>
+                    <ul>${makeList(riskCounts, riskLabels)}</ul>
+                </div>
+                <div class="preview-stat-box">
+                    <h4>部署別件数</h4>
+                    <ul>${makeList(deptCounts, null)}</ul>
+                </div>
+            </div>`;
+    }
+
+    // --- Event: Print Buttons ---
+
+    // メイン画面の「印刷する」ボタン → プレビュー経由
+    document.querySelector('.history-toggle .btn-history[onclick]')?.removeAttribute('onclick');
+    document.querySelectorAll('.history-toggle .btn-history').forEach(btn => {
+        if (btn.textContent.includes('印刷する')) {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                openPrintPreview('form');
+            };
+        }
+    });
+
+    // モーダル内「一覧を印刷」ボタン → プレビュー経由
+    document.getElementById('printListBtn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPrintPreview('list');
+    });
+
+    // モーダル内「統計だけを印刷」ボタン → プレビュー経由
+    document.getElementById('printStatsBtn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPrintPreview('stats');
+    });
+
+    // プレビューモーダル操作
+    document.getElementById('printPreviewExecuteBtn')?.addEventListener('click', executePrint);
+    document.getElementById('printPreviewCloseBtn')?.addEventListener('click', closePrintPreview);
+
+    // 個別報告の印刷 → プレビュー経由
+    window.__printReport = function (id) {
+        openPrintPreview('single', id);
     };
 
     // expose for inline onclick

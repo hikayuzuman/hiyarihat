@@ -376,6 +376,32 @@
         </div>
     </div>
 
+    <!-- 印刷プレビューモーダル -->
+    <div class="print-preview-overlay" id="printPreviewModal">
+        <div class="print-preview-container">
+            <div class="print-preview-toolbar">
+                <h3 id="printPreviewTitle">印刷プレビュー</h3>
+                <div class="print-preview-actions">
+                    <button type="button" class="btn btn-submit" id="printPreviewExecuteBtn">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width:16px;height:16px;">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        印刷実行
+                    </button>
+                    <button type="button" class="btn btn-clear" id="printPreviewCloseBtn">閉じる</button>
+                </div>
+            </div>
+            <div class="print-preview-scroll">
+                <div class="print-preview-page" id="printPreviewContent">
+                    <!-- 動的にレンダリング -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 
