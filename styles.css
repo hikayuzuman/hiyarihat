@@ -1037,6 +1037,25 @@ body {
     body.printing-modal .history-card-delete {
         display: none !important;
     }
+
+    /* === 統計のみ印刷時の設定 === */
+    body.printing-stats-only #historyList {
+        display: none !important;
+    }
+
+    /* === 個別報告のみ印刷時の設定 === */
+    body.printing-single-report .statistics-area {
+        display: none !important;
+    }
+
+    body.printing-single-report .history-card:not(.print-target) {
+        display: none !important;
+    }
+
+    body.printing-single-report .history-card.print-target {
+        border-left: none;
+        margin-top: 20px;
+    }
 }
 
 /* 統計エリアのスタイル */

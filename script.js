@@ -267,13 +267,22 @@
             const desc = r.description.length > 100 ? r.description.slice(0, 100) + '…' : r.description;
             return `
                 <div class="history-card" data-id="${r.id}">
-                    <button type="button" class="history-card-delete" onclick="window.__deleteReport('${r.id}')" title="削除">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                    <div class="history-card-header">
+                    <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
+                        <button type="button" class="history-card-print" onclick="window.__printReport('${r.id}')" title="この報告を印刷" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);padding:4px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                        </button>
+                        <button type="button" class="history-card-delete" onclick="window.__deleteReport('${r.id}')" title="削除" style="position:static; opacity:1;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="history-card-header" style="padding-right: 60px;">
                         <span class="history-card-title">${escapeHtml(r.reporterName)} — ${escapeHtml(r.location)}</span>
                         <span class="history-card-date">${formatDateTime(r.incidentDate)}</span>
                     </div>
@@ -315,14 +324,41 @@
         document.getElementById('deptStatsList').innerHTML = createListItems(deptCounts);
     }
 
-    // --- Modal Print ---
+    // --- Modal Print (List/Stats/Single) ---
     document.getElementById('printListBtn')?.addEventListener('click', () => {
         document.body.classList.add('printing-modal');
+        document.body.classList.remove('printing-stats-only', 'printing-single-report');
         window.print();
-        setTimeout(() => {
-            document.body.classList.remove('printing-modal');
-        }, 500); // 印刷ダイアログを閉じたあとにクラスを外す
+        setTimeout(() => document.body.classList.remove('printing-modal'), 500);
     });
+
+    document.getElementById('printStatsBtn')?.addEventListener('click', () => {
+        document.body.classList.add('printing-modal', 'printing-stats-only');
+        document.body.classList.remove('printing-single-report');
+        window.print();
+        setTimeout(() => document.body.classList.remove('printing-modal', 'printing-stats-only'), 500);
+    });
+
+    window.__printReport = function (id) {
+        document.body.classList.add('printing-modal', 'printing-single-report');
+        document.body.classList.remove('printing-stats-only');
+
+        // 印刷対象のカードだけを表示するためのデータ属性を追加
+        document.querySelectorAll('.history-card').forEach(card => {
+            if (card.dataset.id === id) {
+                card.classList.add('print-target');
+            } else {
+                card.classList.remove('print-target');
+            }
+        });
+
+        window.print();
+
+        setTimeout(() => {
+            document.body.classList.remove('printing-modal', 'printing-single-report');
+            document.querySelectorAll('.print-target').forEach(c => c.classList.remove('print-target'));
+        }, 500);
+    };
 
     // expose for inline onclick
     window.__deleteReport = function (id) {
