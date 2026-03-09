@@ -970,4 +970,130 @@ body {
     :-ms-input-placeholder {
         color: transparent;
     }
+
+    /* === 一覧モーダル印刷時の設定 === */
+    body.printing-modal .form-container,
+    body.printing-modal .confirmation-screen {
+        display: none !important;
+    }
+
+    body.printing-modal .modal-overlay {
+        display: block !important;
+        position: static;
+        background: transparent;
+        padding: 0;
+        overflow: visible;
+    }
+
+    body.printing-modal .modal-content {
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+        border: none;
+    }
+
+    body.printing-modal .modal-header {
+        padding: 0 0 10px 0;
+        border-bottom: 2px solid #000;
+        margin-bottom: 15px;
+    }
+
+    body.printing-modal .modal-close,
+    body.printing-modal #printListBtn {
+        display: none !important;
+    }
+
+    body.printing-modal .modal-body {
+        max-height: none;
+        padding: 0;
+        overflow: visible;
+    }
+
+    body.printing-modal .statistics-area {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
+
+    body.printing-modal .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    body.printing-modal .stat-box {
+        box-shadow: none;
+        border: 1px solid #eee;
+    }
+
+    body.printing-modal .history-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #aaa;
+        border-left: 4px solid #666;
+        background: #fff;
+        margin-bottom: 10px;
+    }
+
+    body.printing-modal .history-card-delete {
+        display: none !important;
+    }
+}
+
+/* 統計エリアのスタイル */
+.statistics-area {
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+}
+
+.statistics-area h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary-light);
+    display: inline-block;
+    padding-bottom: 2px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.stat-box {
+    background: #fff;
+    padding: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box h4 {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.stat-box ul {
+    list-style: none;
+    font-size: 0.85rem;
+}
+
+.stat-box li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.stat-box li:last-child {
+    border-bottom: none;
+}
+
+.stat-count {
+    font-weight: bold;
+    color: var(--primary);
 }

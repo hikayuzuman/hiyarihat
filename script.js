@@ -249,10 +249,16 @@
 
     function renderHistory() {
         const reports = getReports();
+        const statsArea = document.getElementById('statisticsArea');
+
         if (reports.length === 0) {
             historyList.innerHTML = '<p class="empty-state">まだ報告がありません</p>';
+            statsArea.style.display = 'none';
             return;
         }
+
+        statsArea.style.display = 'block';
+        renderStatistics(reports);
 
         const riskLabels = ['レベル0', 'レベル1', 'レベル2', 'レベル3'];
         historyList.innerHTML = reports.map(r => {
@@ -280,6 +286,43 @@
                 </div>`;
         }).join('');
     }
+
+    function renderStatistics(reports) {
+        const categoryCounts = {};
+        const riskCounts = { '0': 0, '1': 0, '2': 0, '3': 0 };
+        const deptCounts = {};
+
+        reports.forEach(r => {
+            if (r.category) categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
+            if (r.riskLevel) riskCounts[r.riskLevel]++;
+            const dept = r.department || '未設定';
+            deptCounts[dept] = (deptCounts[dept] || 0) + 1;
+        });
+
+        const riskLabels = ['レベル0', 'レベル1', 'レベル2', 'レベル3'];
+
+        const createListItems = (counts, labelMap = null) => {
+            return Object.entries(counts)
+                .sort((a, b) => b[1] - a[1]) // 件数で降順
+                .map(([key, count]) => {
+                    const label = labelMap ? labelMap[key] : key;
+                    return `<li><span>${escapeHtml(label)}</span> <span class="stat-count">${count}件</span></li>`;
+                }).join('');
+        };
+
+        document.getElementById('categoryStatsList').innerHTML = createListItems(categoryCounts);
+        document.getElementById('riskStatsList').innerHTML = createListItems(riskCounts, riskLabels);
+        document.getElementById('deptStatsList').innerHTML = createListItems(deptCounts);
+    }
+
+    // --- Modal Print ---
+    document.getElementById('printListBtn')?.addEventListener('click', () => {
+        document.body.classList.add('printing-modal');
+        window.print();
+        setTimeout(() => {
+            document.body.classList.remove('printing-modal');
+        }, 500); // 印刷ダイアログを閉じたあとにクラスを外す
+    });
 
     // expose for inline onclick
     window.__deleteReport = function (id) {
