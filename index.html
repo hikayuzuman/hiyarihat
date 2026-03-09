@@ -259,7 +259,7 @@
             </div>
         </form>
 
-        <!-- 報告一覧ボタン -->
+        <!-- 報告一覧・印刷ボタン -->
         <div class="history-toggle">
             <button type="button" class="btn btn-history" id="historyBtn">
                 <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -278,6 +278,14 @@
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
                 CSVエクスポート
+            </button>
+            <button type="button" class="btn btn-history" onclick="window.print()" style="color: var(--text-primary);">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                印刷する
             </button>
         </div>
     </div>

@@ -822,28 +822,152 @@ body {
 }
 
 @media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm 15mm;
+    }
+
     body {
-        background: #fff
+        background: #fff;
+        font-size: 11px;
+        /* 全体的にフォントを小さく */
+        color: #000;
+        line-height: 1.4;
     }
 
     .form-container {
         max-width: 100%;
-        padding: 0
+        padding: 0;
+        margin: 0;
+    }
+
+    .form-header {
+        box-shadow: none;
+        margin-bottom: 8px;
+        padding-bottom: 0px;
+    }
+
+    .header-content {
+        padding: 5px 0;
+    }
+
+    .header-content h1 {
+        font-size: 1.3rem;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .form-description,
+    .required-note {
+        display: none;
+        /* 説明文などは印刷時に不要なら非表示 */
     }
 
     .form-section {
         box-shadow: none;
-        border: 1px solid #ddd;
-        break-inside: avoid
+        border: 1px solid #999;
+        break-inside: avoid;
+        margin-bottom: 8px;
+        page-break-inside: avoid;
+    }
+
+    .section-header {
+        padding: 8px 10px 4px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .section-header h2 {
+        font-size: 1rem;
+    }
+
+    .form-group {
+        padding: 6px 10px;
+        page-break-inside: avoid;
+    }
+
+    .form-label {
+        font-size: 0.8rem;
+        margin-bottom: 2px;
+        font-weight: bold;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        font-size: 0.9rem;
+        padding: 4px 0;
+        border-bottom: 1px solid #ccc;
+        color: #000;
+        background: transparent !important;
+    }
+
+    .form-textarea {
+        border: 1px solid #ccc;
+        padding: 6px;
+        min-height: 40px;
+        /* テキストエリアの高さを抑える */
+    }
+
+    /* ラジオボタンを横並びにしてスペースを節約 */
+    .radio-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .radio-label {
+        padding: 4px;
+        gap: 6px;
+    }
+
+    .radio-text {
+        font-size: 0.8rem;
+    }
+
+    .risk-level-group {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .risk-level-group .radio-label {
+        flex: 1;
+        padding: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .risk-desc {
+        display: none;
+        /* リスクの細かい説明は非表示にしてスペース節約 */
+    }
+
+    .char-count {
+        display: none;
     }
 
     .form-actions,
     .history-toggle,
     .btn-clear {
-        display: none
+        display: none !important;
     }
 
     .section-color-bar {
-        background: var(--primary) !important
+        display: none;
+        /* カラーバーを消して左のスペースを確保 */
+    }
+
+    ::-webkit-input-placeholder {
+        color: transparent;
+    }
+
+    :-moz-placeholder {
+        color: transparent;
+    }
+
+    ::-moz-placeholder {
+        color: transparent;
+    }
+
+    :-ms-input-placeholder {
+        color: transparent;
     }
 }
