@@ -821,345 +821,8 @@ body {
     }
 }
 
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 10mm 12mm;
-    }
-
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    body {
-        background: #fff;
-        font-size: 10.5px;
-        color: #000;
-        line-height: 1.4;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* === プレビューモーダルから印刷する場合 === */
-    body.printing-preview .form-container,
-    body.printing-preview .confirmation-screen,
-    body.printing-preview .modal-overlay,
-    body.printing-preview .print-preview-toolbar,
-    body.printing-preview .print-preview-scroll {
-        display: none !important;
-    }
-
-    body.printing-preview .print-preview-overlay {
-        display: block !important;
-        position: static;
-        background: transparent;
-        padding: 0;
-        overflow: visible;
-    }
-
-    body.printing-preview .print-preview-container {
-        box-shadow: none;
-        background: transparent;
-        max-width: 100%;
-        height: auto;
-    }
-
-    body.printing-preview .print-preview-page {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        min-height: auto;
-    }
-
-    body.printing-preview #printPreviewContent {
-        display: block !important;
-    }
-
-    /* プレビューコンテンツの印刷表示 */
-    body.printing-preview .preview-report-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 10.5px;
-    }
-
-    body.printing-preview .preview-report-table th,
-    body.printing-preview .preview-report-table td {
-        border: 1px solid #333;
-        padding: 6px 10px;
-        text-align: left;
-        vertical-align: top;
-    }
-
-    body.printing-preview .preview-report-table th {
-        background: #f0f0f0 !important;
-        font-weight: bold;
-        width: 120px;
-        white-space: nowrap;
-    }
-
-    body.printing-preview .preview-section-header {
-        background: #e8e0f0 !important;
-        font-weight: bold;
-        text-align: center;
-        font-size: 11px;
-    }
-
-    body.printing-preview .preview-header {
-        text-align: center;
-        margin-bottom: 12px;
-    }
-
-    body.printing-preview .preview-header h2 {
-        font-size: 16px;
-        margin: 0 0 4px 0;
-    }
-
-    body.printing-preview .preview-header .print-date {
-        font-size: 9px;
-        color: #666;
-    }
-
-    body.printing-preview .preview-report-table td.multiline-cell {
-        white-space: pre-wrap;
-        line-height: 1.5;
-    }
-
-    /* === 通常の印刷（プレビューなし） - フォーム画面 === */
-    body:not(.printing-preview):not(.printing-modal) .form-container {
-        max-width: 100%;
-        padding: 0;
-        margin: 0;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .form-header {
-        box-shadow: none;
-        margin-bottom: 8px;
-        padding-bottom: 0;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .header-content {
-        padding: 5px 0;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .header-content h1 {
-        font-size: 1.3rem;
-        text-align: center;
-        margin-bottom: 4px;
-    }
-
-    .form-description,
-    .required-note {
-        display: none;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .form-section {
-        box-shadow: none;
-        border: 1px solid #999;
-        break-inside: avoid;
-        margin-bottom: 8px;
-        page-break-inside: avoid;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .section-header {
-        padding: 8px 10px 4px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .section-header h2 {
-        font-size: 1rem;
-    }
-
-    body:not(.printing-preview):not(.printing-modal) .form-group {
-        padding: 6px 10px;
-        page-break-inside: avoid;
-    }
-
-    .form-label {
-        font-size: 0.8rem;
-        margin-bottom: 2px;
-        font-weight: bold;
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-        font-size: 0.9rem;
-        padding: 4px 0;
-        border-bottom: 1px solid #ccc;
-        color: #000;
-        background: transparent !important;
-    }
-
-    .form-textarea {
-        border: 1px solid #ccc;
-        padding: 6px;
-        min-height: 40px;
-    }
-
-    .radio-group {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .radio-label {
-        padding: 4px;
-        gap: 6px;
-    }
-
-    .radio-text {
-        font-size: 0.8rem;
-    }
-
-    .risk-level-group {
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-
-    .risk-level-group .radio-label {
-        flex: 1;
-        padding: 4px;
-        border: 1px solid #ccc;
-    }
-
-    .risk-desc {
-        display: none;
-    }
-
-    .char-count {
-        display: none;
-    }
-
-    .form-actions,
-    .history-toggle,
-    .btn-clear {
-        display: none !important;
-    }
-
-    .section-color-bar {
-        display: none;
-    }
-
-    .header-color-bar {
-        display: none;
-    }
-
-    ::-webkit-input-placeholder {
-        color: transparent;
-    }
-
-    :-moz-placeholder {
-        color: transparent;
-    }
-
-    ::-moz-placeholder {
-        color: transparent;
-    }
-
-    :-ms-input-placeholder {
-        color: transparent;
-    }
-
-    /* === 一覧モーダル印刷時の設定 === */
-    body.printing-modal .form-container,
-    body.printing-modal .confirmation-screen,
-    body.printing-modal .print-preview-overlay {
-        display: none !important;
-    }
-
-    body.printing-modal .modal-overlay {
-        display: block !important;
-        position: static;
-        background: transparent;
-        padding: 0;
-        overflow: visible;
-    }
-
-    body.printing-modal .modal-content {
-        box-shadow: none;
-        margin: 0;
-        max-width: 100%;
-        border: none;
-    }
-
-    body.printing-modal .modal-header {
-        padding: 0 0 10px 0;
-        border-bottom: 2px solid #000;
-        margin-bottom: 15px;
-    }
-
-    body.printing-modal .modal-close,
-    body.printing-modal #printListBtn,
-    body.printing-modal #printStatsBtn {
-        display: none !important;
-    }
-
-    body.printing-modal .modal-body {
-        max-height: none;
-        padding: 0;
-        overflow: visible;
-    }
-
-    body.printing-modal .statistics-area {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        border: 1px solid #ccc;
-        background: #fff;
-    }
-
-    body.printing-modal .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    body.printing-modal .stat-box {
-        box-shadow: none;
-        border: 1px solid #eee;
-    }
-
-    body.printing-modal .history-card {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        border: 1px solid #aaa;
-        border-left: 4px solid #666;
-        background: #fff;
-        margin-bottom: 10px;
-    }
-
-    body.printing-modal .history-card-delete,
-    body.printing-modal .history-card-print {
-        display: none !important;
-    }
-
-    /* === 統計のみ印刷時の設定 === */
-    body.printing-stats-only #historyList {
-        display: none !important;
-    }
-
-    /* === 個別報告のみ印刷時の設定 === */
-    body.printing-single-report .statistics-area {
-        display: none !important;
-    }
-
-    body.printing-single-report .history-card:not(.print-target) {
-        display: none !important;
-    }
-
-    body.printing-single-report .history-card.print-target {
-        border-left: none;
-        margin-top: 20px;
-    }
-
-    /* 印刷時にプレビューモーダルを隠す（プレビュー以外の場合） */
-    body:not(.printing-preview) .print-preview-overlay {
-        display: none !important;
-    }
-}
-
 /* ========================================
-   印刷プレビューモーダル
+   印刷プレビューモーダル（画面表示用）
    ======================================== */
 .print-preview-overlay {
     display: none;
@@ -1452,4 +1115,374 @@ body {
 .stat-count {
     font-weight: bold;
     color: var(--primary);
+}
+
+/* ========================================
+   印刷スタイル
+   ======================================== */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        background: #fff;
+        font-size: 10.5px;
+        color: #000;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ========================================
+       プレビューモーダルから「印刷実行」した場合
+       ======================================== */
+    body.printing-preview .form-container,
+    body.printing-preview .confirmation-screen,
+    body.printing-preview .modal-overlay {
+        display: none !important;
+    }
+
+    /* オーバーレイをフラットなブロックに変える */
+    body.printing-preview .print-preview-overlay {
+        display: block !important;
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    body.printing-preview .print-preview-container {
+        display: block !important;
+        height: auto !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    /* ツールバーは非表示 */
+    body.printing-preview .print-preview-toolbar {
+        display: none !important;
+    }
+
+    /* ★ 修正ポイント: scroll コンテナを非表示にせず、印刷向けにフラット化 */
+    body.printing-preview .print-preview-scroll {
+        display: block !important;
+        flex: none !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        background: transparent !important;
+        justify-content: initial !important;
+    }
+
+    /* ページ枠も印刷向けにリセット */
+    body.printing-preview .print-preview-page {
+        width: 100% !important;
+        min-height: auto !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #fff !important;
+        font-size: 10.5px;
+        line-height: 1.5;
+        color: #000;
+    }
+
+    /* プレビューコンテンツのテーブル */
+    body.printing-preview .preview-report-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10.5px;
+    }
+
+    body.printing-preview .preview-report-table th,
+    body.printing-preview .preview-report-table td {
+        border: 1px solid #333 !important;
+        padding: 6px 10px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    body.printing-preview .preview-report-table th {
+        background: #f0f0f0 !important;
+        font-weight: bold;
+        width: 120px;
+        white-space: nowrap;
+    }
+
+    body.printing-preview .preview-section-header td {
+        background: #e8e0f0 !important;
+        font-weight: bold;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    body.printing-preview .preview-header {
+        text-align: center;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 8px;
+    }
+
+    body.printing-preview .preview-header h2 {
+        font-size: 16px;
+        margin: 0 0 4px 0;
+    }
+
+    body.printing-preview .preview-header .print-date {
+        font-size: 9px;
+        color: #666;
+    }
+
+    body.printing-preview .preview-report-table td.multiline-cell {
+        white-space: pre-wrap;
+        line-height: 1.5;
+    }
+
+    body.printing-preview .preview-stats-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    body.printing-preview .preview-stat-box {
+        border: 1px solid #999 !important;
+        break-inside: avoid;
+    }
+
+    body.printing-preview .preview-stat-count {
+        color: #4a148c !important;
+    }
+
+    body.printing-preview .preview-report-card {
+        border: 1px solid #aaa !important;
+        border-left: 4px solid #673ab7 !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* 印刷時にプレビューモーダルを隠す（プレビュー以外の場合） */
+    body:not(.printing-preview) .print-preview-overlay {
+        display: none !important;
+    }
+
+    /* ========================================
+       通常の画面印刷（フォーム直接印刷）
+       ======================================== */
+    body:not(.printing-preview):not(.printing-modal) .form-container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .form-header {
+        box-shadow: none;
+        margin-bottom: 8px;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .header-content {
+        padding: 5px 0;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .header-content h1 {
+        font-size: 1.3rem;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .form-description,
+    .required-note {
+        display: none;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .form-section {
+        box-shadow: none;
+        border: 1px solid #999;
+        break-inside: avoid;
+        margin-bottom: 8px;
+        page-break-inside: avoid;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .section-header {
+        padding: 8px 10px 4px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .section-header h2 {
+        font-size: 1rem;
+    }
+
+    body:not(.printing-preview):not(.printing-modal) .form-group {
+        padding: 6px 10px;
+        page-break-inside: avoid;
+    }
+
+    .form-label {
+        font-size: 0.8rem;
+        margin-bottom: 2px;
+        font-weight: bold;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        font-size: 0.9rem;
+        padding: 4px 0;
+        border-bottom: 1px solid #ccc;
+        color: #000;
+        background: transparent !important;
+    }
+
+    .form-textarea {
+        border: 1px solid #ccc;
+        padding: 6px;
+        min-height: 40px;
+    }
+
+    .radio-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .radio-label {
+        padding: 4px;
+        gap: 6px;
+    }
+
+    .radio-text {
+        font-size: 0.8rem;
+    }
+
+    .risk-level-group {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .risk-level-group .radio-label {
+        flex: 1;
+        padding: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .risk-desc {
+        display: none;
+    }
+
+    .char-count {
+        display: none;
+    }
+
+    .form-actions,
+    .history-toggle,
+    .btn-clear {
+        display: none !important;
+    }
+
+    .section-color-bar,
+    .header-color-bar {
+        display: none;
+    }
+
+    ::-webkit-input-placeholder { color: transparent; }
+    :-moz-placeholder { color: transparent; }
+    ::-moz-placeholder { color: transparent; }
+    :-ms-input-placeholder { color: transparent; }
+
+    /* ========================================
+       一覧モーダル印刷時
+       ======================================== */
+    body.printing-modal .form-container,
+    body.printing-modal .confirmation-screen,
+    body.printing-modal .print-preview-overlay {
+        display: none !important;
+    }
+
+    body.printing-modal .modal-overlay {
+        display: block !important;
+        position: static;
+        background: transparent;
+        padding: 0;
+        overflow: visible;
+    }
+
+    body.printing-modal .modal-content {
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+        border: none;
+    }
+
+    body.printing-modal .modal-header {
+        padding: 0 0 10px 0;
+        border-bottom: 2px solid #000;
+        margin-bottom: 15px;
+    }
+
+    body.printing-modal .modal-close,
+    body.printing-modal #printListBtn,
+    body.printing-modal #printStatsBtn {
+        display: none !important;
+    }
+
+    body.printing-modal .modal-body {
+        max-height: none;
+        padding: 0;
+        overflow: visible;
+    }
+
+    body.printing-modal .statistics-area {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
+
+    body.printing-modal .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    body.printing-modal .stat-box {
+        box-shadow: none;
+        border: 1px solid #eee;
+    }
+
+    body.printing-modal .history-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #aaa;
+        border-left: 4px solid #666;
+        background: #fff;
+        margin-bottom: 10px;
+    }
+
+    body.printing-modal .history-card-delete,
+    body.printing-modal .history-card-print {
+        display: none !important;
+    }
+
+    /* 統計のみ印刷 */
+    body.printing-stats-only #historyList {
+        display: none !important;
+    }
+
+    /* 個別報告のみ印刷 */
+    body.printing-single-report .statistics-area {
+        display: none !important;
+    }
+
+    body.printing-single-report .history-card:not(.print-target) {
+        display: none !important;
+    }
+
+    body.printing-single-report .history-card.print-target {
+        border-left: none;
+        margin-top: 20px;
+    }
 }
